@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "815155634540",
+    "project_id": "ofly-tech-test",
+    "storage_bucket": "ofly-tech-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815155634540:android:a13695a58ad0056c2d9349",
+        "android_client_info": {
+          "package_name": "com.example.ofly_tech_test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLlNOjY7UXNcz22INiCN0OyTOOmNH_0AA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
