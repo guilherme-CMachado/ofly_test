@@ -1,6 +1,6 @@
 # ofly_tech_test
 
-A new Flutter project.
+The technical test dedicated for the onfly company.
 
 ## Getting Started
 
