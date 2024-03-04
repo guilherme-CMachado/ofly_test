@@ -18,64 +18,82 @@ class _CadastroPageState extends State<CadastroPage> {
     final _nameController = TextEditingController();
 
     final _userService = UserService();
-    return Form(
-      child: Column(
-        children: [
-          Text("Informe seus dados"),
-          SizedBox(
-            height: 30,
-          ),
-          TextFormField(
-            controller: _nameController,
-            decoration: InputDecoration(
-                border: InputBorder.none, hintText: "Nome Completo"),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          TextFormField(
-            controller: _ageController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-                border: InputBorder.none, hintText: "Sua idade"),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            controller: _emailController,
-            decoration:
-                InputDecoration(border: InputBorder.none, hintText: "Email"),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          TextFormField(
-            controller: _passwordController,
-            decoration:
-                InputDecoration(border: InputBorder.none, hintText: "Senha"),
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          TextButton(
-            onPressed: () {
-              _userService.createUser(
-                User(
-                  name: _nameController.text,
-                  email: _emailController.text,
-                  age: int.parse(
-                    _ageController.text,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Cadastro"),
+      ),
+      body: Container(
+        margin: const EdgeInsets.all(12),
+        child: Form(
+          child: Column(
+            children: [
+              Text("Informe seus dados"),
+              SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: "Nome Completo"),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                controller: _ageController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: "Sua idade"),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                keyboardType: TextInputType.emailAddress,
+                controller: _emailController,
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: "Email"),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                controller: _passwordController,
+                validator: (validator) {
+                  "A senha deverá no mínimo 6 caracteres";
+                },
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: "Senha"),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Spacer(),
+              Container(
+                margin: const EdgeInsets.all(12),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    maximumSize: Size(double.infinity, 40),
                   ),
-                  password: _passwordController.text,
+                  onPressed: () {
+                    _userService.createUser(
+                      _emailController.text,
+                      _passwordController.text,
+                      _nameController.text,
+                      int.parse(_ageController.text),
+                      context,
+                    );
+                  },
+                  child: Text(
+                    "Enviar dados",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              );
-              Navigator.of(context).pop();
-            },
-            child: Text("Enviar dados"),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

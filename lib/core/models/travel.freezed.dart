@@ -22,7 +22,9 @@ Travel _$TravelFromJson(Map<String, dynamic> json) {
 mixin _$Travel {
   String get company => throw _privateConstructorUsedError;
   String get airport => throw _privateConstructorUsedError;
-  String get ticket => throw _privateConstructorUsedError;
+  String get departure => throw _privateConstructorUsedError;
+  String get arrival => throw _privateConstructorUsedError;
+  Duration? get duration => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +36,12 @@ abstract class $TravelCopyWith<$Res> {
   factory $TravelCopyWith(Travel value, $Res Function(Travel) then) =
       _$TravelCopyWithImpl<$Res, Travel>;
   @useResult
-  $Res call({String company, String airport, String ticket});
+  $Res call(
+      {String company,
+      String airport,
+      String departure,
+      String arrival,
+      Duration? duration});
 }
 
 /// @nodoc
@@ -52,7 +59,9 @@ class _$TravelCopyWithImpl<$Res, $Val extends Travel>
   $Res call({
     Object? company = null,
     Object? airport = null,
-    Object? ticket = null,
+    Object? departure = null,
+    Object? arrival = null,
+    Object? duration = freezed,
   }) {
     return _then(_value.copyWith(
       company: null == company
@@ -63,10 +72,18 @@ class _$TravelCopyWithImpl<$Res, $Val extends Travel>
           ? _value.airport
           : airport // ignore: cast_nullable_to_non_nullable
               as String,
-      ticket: null == ticket
-          ? _value.ticket
-          : ticket // ignore: cast_nullable_to_non_nullable
+      departure: null == departure
+          ? _value.departure
+          : departure // ignore: cast_nullable_to_non_nullable
               as String,
+      arrival: null == arrival
+          ? _value.arrival
+          : arrival // ignore: cast_nullable_to_non_nullable
+              as String,
+      duration: freezed == duration
+          ? _value.duration
+          : duration // ignore: cast_nullable_to_non_nullable
+              as Duration?,
     ) as $Val);
   }
 }
@@ -78,7 +95,12 @@ abstract class _$$TravelImplCopyWith<$Res> implements $TravelCopyWith<$Res> {
       __$$TravelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String company, String airport, String ticket});
+  $Res call(
+      {String company,
+      String airport,
+      String departure,
+      String arrival,
+      Duration? duration});
 }
 
 /// @nodoc
@@ -94,7 +116,9 @@ class __$$TravelImplCopyWithImpl<$Res>
   $Res call({
     Object? company = null,
     Object? airport = null,
-    Object? ticket = null,
+    Object? departure = null,
+    Object? arrival = null,
+    Object? duration = freezed,
   }) {
     return _then(_$TravelImpl(
       company: null == company
@@ -105,10 +129,18 @@ class __$$TravelImplCopyWithImpl<$Res>
           ? _value.airport
           : airport // ignore: cast_nullable_to_non_nullable
               as String,
-      ticket: null == ticket
-          ? _value.ticket
-          : ticket // ignore: cast_nullable_to_non_nullable
+      departure: null == departure
+          ? _value.departure
+          : departure // ignore: cast_nullable_to_non_nullable
               as String,
+      arrival: null == arrival
+          ? _value.arrival
+          : arrival // ignore: cast_nullable_to_non_nullable
+              as String,
+      duration: freezed == duration
+          ? _value.duration
+          : duration // ignore: cast_nullable_to_non_nullable
+              as Duration?,
     ));
   }
 }
@@ -117,7 +149,11 @@ class __$$TravelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$TravelImpl with DiagnosticableTreeMixin implements _Travel {
   const _$TravelImpl(
-      {required this.company, required this.airport, required this.ticket});
+      {required this.company,
+      required this.airport,
+      required this.departure,
+      required this.arrival,
+      required this.duration});
 
   factory _$TravelImpl.fromJson(Map<String, dynamic> json) =>
       _$$TravelImplFromJson(json);
@@ -127,11 +163,15 @@ class _$TravelImpl with DiagnosticableTreeMixin implements _Travel {
   @override
   final String airport;
   @override
-  final String ticket;
+  final String departure;
+  @override
+  final String arrival;
+  @override
+  final Duration? duration;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Travel(company: $company, airport: $airport, ticket: $ticket)';
+    return 'Travel(company: $company, airport: $airport, departure: $departure, arrival: $arrival, duration: $duration)';
   }
 
   @override
@@ -141,7 +181,9 @@ class _$TravelImpl with DiagnosticableTreeMixin implements _Travel {
       ..add(DiagnosticsProperty('type', 'Travel'))
       ..add(DiagnosticsProperty('company', company))
       ..add(DiagnosticsProperty('airport', airport))
-      ..add(DiagnosticsProperty('ticket', ticket));
+      ..add(DiagnosticsProperty('departure', departure))
+      ..add(DiagnosticsProperty('arrival', arrival))
+      ..add(DiagnosticsProperty('duration', duration));
   }
 
   @override
@@ -151,12 +193,17 @@ class _$TravelImpl with DiagnosticableTreeMixin implements _Travel {
             other is _$TravelImpl &&
             (identical(other.company, company) || other.company == company) &&
             (identical(other.airport, airport) || other.airport == airport) &&
-            (identical(other.ticket, ticket) || other.ticket == ticket));
+            (identical(other.departure, departure) ||
+                other.departure == departure) &&
+            (identical(other.arrival, arrival) || other.arrival == arrival) &&
+            (identical(other.duration, duration) ||
+                other.duration == duration));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, company, airport, ticket);
+  int get hashCode =>
+      Object.hash(runtimeType, company, airport, departure, arrival, duration);
 
   @JsonKey(ignore: true)
   @override
@@ -176,7 +223,9 @@ abstract class _Travel implements Travel {
   const factory _Travel(
       {required final String company,
       required final String airport,
-      required final String ticket}) = _$TravelImpl;
+      required final String departure,
+      required final String arrival,
+      required final Duration? duration}) = _$TravelImpl;
 
   factory _Travel.fromJson(Map<String, dynamic> json) = _$TravelImpl.fromJson;
 
@@ -185,7 +234,11 @@ abstract class _Travel implements Travel {
   @override
   String get airport;
   @override
-  String get ticket;
+  String get departure;
+  @override
+  String get arrival;
+  @override
+  Duration? get duration;
   @override
   @JsonKey(ignore: true)
   _$$TravelImplCopyWith<_$TravelImpl> get copyWith =>

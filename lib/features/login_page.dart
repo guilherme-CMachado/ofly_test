@@ -1,10 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ofly_tech_test/core/models/user.dart';
+import 'package:ofly_tech_test/core/services/user_services.dart';
+import 'package:ofly_tech_test/features/cadastro/cadastro_page.dart';
+import 'package:ofly_tech_test/features/home/home_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final _userService = UserService();
     final _emailController = TextEditingController();
     final _passwordController = TextEditingController();
     return SafeArea(
@@ -17,7 +23,7 @@ class LoginPage extends StatelessWidget {
             height: 400,
             child: Column(
               children: [
-                Text(
+                const Text(
                   "Olá!",
                   style: TextStyle(
                     fontSize: 30,
@@ -25,7 +31,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 TextField(
                   controller: _emailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: "Email",
                     prefixIcon: Icon(
@@ -36,7 +42,7 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 20),
                 TextField(
                   controller: _passwordController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: "Senha",
                     prefixIcon: Icon(
@@ -50,18 +56,32 @@ class LoginPage extends StatelessWidget {
                   width: double.maxFinite,
                   height: 50,
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed("/home");
+                    onPressed: () async {
+                      // Autenticação do usuário
+                      UserModel? user = await _userService.signIn(
+                        _emailController.text,
+                        _passwordController.text,
+                      );
+
+                      if (user != null) {
+                        // Navega para a HomePage com os dados do usuário
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => HomePage(userModel: user),
+                          ),
+                        );
+                      }
                     },
-                    child: Text(
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 4),
+                    ),
+                    child: const Text(
                       "Login",
                       style: TextStyle(
                         color: Colors.white,
                       ),
-                    ),
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
                     ),
                   ),
                 ),
@@ -72,7 +92,8 @@ class LoginPage extends StatelessWidget {
                   height: 50,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed("/cadastro");
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => CadastroPage()));
                     },
                     child: Text("Cadastrar"),
                     style: TextButton.styleFrom(
