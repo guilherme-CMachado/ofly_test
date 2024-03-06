@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:ofly_tech_test/core/models/user.dart';
+import 'package:ofly_tech_test/core/models/user_model.dart';
 
 class HomePage extends StatefulWidget {
   UserModel userModel;
@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
             if (snapshot.hasData) {
               return Column(
                 children: [
-                  Text("Olá! ${userModel?.name}"),
+                  Text("Olá!"),
                   const Spacer(),
                   Container(
                     margin: const EdgeInsets.all(18),

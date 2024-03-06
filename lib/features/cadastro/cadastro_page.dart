@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ofly_tech_test/core/models/user.dart';
+import 'package:ofly_tech_test/core/models/user_model.dart';
 import 'package:ofly_tech_test/core/services/user_services.dart';
 
 class CadastroPage extends StatefulWidget {
@@ -76,15 +76,7 @@ class _CadastroPageState extends State<CadastroPage> {
                     backgroundColor: Colors.blue,
                     maximumSize: Size(double.infinity, 40),
                   ),
-                  onPressed: () {
-                    _userService.createUser(
-                      _emailController.text,
-                      _passwordController.text,
-                      _nameController.text,
-                      int.parse(_ageController.text),
-                      context,
-                    );
-                  },
+                  onPressed: () {},
                   child: Text(
                     "Enviar dados",
                     style: TextStyle(color: Colors.white),

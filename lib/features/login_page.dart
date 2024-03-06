@@ -1,16 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:ofly_tech_test/core/models/user.dart';
-import 'package:ofly_tech_test/core/services/user_services.dart';
 import 'package:ofly_tech_test/features/cadastro/cadastro_page.dart';
-import 'package:ofly_tech_test/features/home/home_page.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _userService = UserService();
     final _emailController = TextEditingController();
     final _passwordController = TextEditingController();
     return SafeArea(
@@ -56,22 +51,7 @@ class LoginPage extends StatelessWidget {
                   width: double.maxFinite,
                   height: 50,
                   child: TextButton(
-                    onPressed: () async {
-                      // Autenticação do usuário
-                      UserModel? user = await _userService.signIn(
-                        _emailController.text,
-                        _passwordController.text,
-                      );
-
-                      if (user != null) {
-                        // Navega para a HomePage com os dados do usuário
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => HomePage(userModel: user),
-                          ),
-                        );
-                      }
-                    },
+                    onPressed: () {},
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.blue,
                       padding: const EdgeInsets.symmetric(
