@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ofly_tech_test/core/models/user_model.dart';
 import 'package:ofly_tech_test/core/services/user_services.dart';
 
 class CadastroPage extends StatefulWidget {
+  static String route = "/cadastro";
   const CadastroPage({super.key});
 
   @override
@@ -12,10 +12,9 @@ class CadastroPage extends StatefulWidget {
 class _CadastroPageState extends State<CadastroPage> {
   @override
   Widget build(BuildContext context) {
-    final _emailController = TextEditingController();
-    final _passwordController = TextEditingController();
-    final _ageController = TextEditingController();
-    final _nameController = TextEditingController();
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final nameController = TextEditingController();
 
     final _userService = UserService();
     return Scaffold(
@@ -32,7 +31,7 @@ class _CadastroPageState extends State<CadastroPage> {
                 height: 30,
               ),
               TextFormField(
-                controller: _nameController,
+                controller: nameController,
                 decoration: InputDecoration(
                     border: InputBorder.none, hintText: "Nome Completo"),
               ),
@@ -40,17 +39,8 @@ class _CadastroPageState extends State<CadastroPage> {
                 height: 30,
               ),
               TextFormField(
-                controller: _ageController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    border: InputBorder.none, hintText: "Sua idade"),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              TextFormField(
                 keyboardType: TextInputType.emailAddress,
-                controller: _emailController,
+                controller: emailController,
                 decoration: InputDecoration(
                     border: InputBorder.none, hintText: "Email"),
               ),
@@ -58,11 +48,13 @@ class _CadastroPageState extends State<CadastroPage> {
                 height: 30,
               ),
               TextFormField(
-                controller: _passwordController,
+                controller: passwordController,
                 validator: (validator) {
-                  "A senha deverá no mínimo 6 caracteres";
+                  if (validator!.length < 6) {
+                    "A senha deverá no mínimo 6 caracteres";
+                  }
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     border: InputBorder.none, hintText: "Senha"),
               ),
               SizedBox(
@@ -76,7 +68,14 @@ class _CadastroPageState extends State<CadastroPage> {
                     backgroundColor: Colors.blue,
                     maximumSize: Size(double.infinity, 40),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    _userService.signUp(
+                      passwordController.text,
+                      context,
+                      emailController.text,
+                      nameController.text,
+                    );
+                  },
                   child: Text(
                     "Enviar dados",
                     style: TextStyle(color: Colors.white),

@@ -8,15 +8,12 @@ class OnflyTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(16),
-      child: TextFormField(
-        controller: textEditingController,
-        decoration: InputDecoration(
-          hintText: hintText,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
+    return TextFormField(
+      controller: textEditingController,
+      decoration: InputDecoration(
+        hintText: hintText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
     );

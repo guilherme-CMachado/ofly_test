@@ -1,11 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ofly_tech_test/features/cadastro/cadastro_page.dart';
+import 'package:ofly_tech_test/core/models/user_model.dart';
+import 'package:ofly_tech_test/core/services/user_services.dart';
+import 'package:ofly_tech_test/features/home/home_page.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  static String route = "/login";
+  UserModel? userModel;
+  LoginPage({super.key, this.userModel});
 
   @override
   Widget build(BuildContext context) {
+    final _userService = UserService();
     final _emailController = TextEditingController();
     final _passwordController = TextEditingController();
     return SafeArea(
@@ -51,7 +57,13 @@ class LoginPage extends StatelessWidget {
                   width: double.maxFinite,
                   height: 50,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      _userService.login(
+                        _emailController.text,
+                        _passwordController.text,
+                        context,
+                      );
+                    },
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.blue,
                       padding: const EdgeInsets.symmetric(
@@ -67,19 +79,15 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Container(
-                  margin: const EdgeInsets.all(8),
-                  width: double.maxFinite,
-                  height: 50,
-                  child: TextButton(
+                  margin: const EdgeInsets.all(10),
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.all(8),
+                        minimumSize: Size(double.maxFinite, 50)),
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => CadastroPage()));
+                      Navigator.of(context).pushNamed("/cadastro");
                     },
                     child: Text("Cadastrar"),
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.grey,
-                      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                    ),
                   ),
                 ),
               ],
