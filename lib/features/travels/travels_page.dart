@@ -48,14 +48,17 @@ class TravelsPage extends StatelessWidget {
             child: Column(
           children: <Widget>[
             OnflyTextField(
+                keyboardInputType: TextInputType.text,
                 textEditingController: _departureController,
                 hintText: "Digite o local de embarque"),
             const Gap(20),
             OnflyTextField(
+                keyboardInputType: TextInputType.text,
                 textEditingController: _arrivalController,
                 hintText: 'Digite o local de destino'),
             const Gap(20),
             OnflyTextField(
+                keyboardInputType: TextInputType.text,
                 textEditingController: _airportController,
                 hintText: 'Digite o aeroporto de destino'),
             const Gap(20),

@@ -40,8 +40,6 @@ class BookedTravelsService {
 
         if (userData.containsKey('bookedTravels')) {
           List<dynamic> bookedTravelsData = userData['bookedTravels'];
-
-          // Mapear a lista de dados para a lista de objetos BookedTravelsModel
           List<BookedTravelsModel> bookedTravelsList = bookedTravelsData
               .map((data) => BookedTravelsModel.fromMap(data))
               .toList();
@@ -49,11 +47,8 @@ class BookedTravelsService {
           return bookedTravelsList;
         }
       }
-
-      // Se não houver dados ou não houver 'bookedTravels', retornar uma lista vazia
       return [];
     } catch (e) {
-      // Lidar com erros
       print("Error getting booked travels: $e");
       return [];
     }

@@ -1,8 +1,5 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
-
 import 'package:ofly_tech_test/core/models/booked_travels_model.dart';
 import 'package:ofly_tech_test/core/models/credit_card_model.dart';
 
@@ -10,13 +7,14 @@ class UserModel {
   final String email;
   final String uid;
   final String userName;
-  CreditCardModel? creditCardModel;
+  List<CreditCardModel>? creditCardModels;
   List<BookedTravelsModel>? bookedTravels;
+
   UserModel({
     required this.email,
     required this.uid,
     required this.userName,
-    this.creditCardModel,
+    this.creditCardModels,
     this.bookedTravels,
   });
 
@@ -24,14 +22,14 @@ class UserModel {
     String? email,
     String? uid,
     String? userName,
-    CreditCardModel? creditCardModel,
+    List<CreditCardModel>? creditCardModels,
     List<BookedTravelsModel>? bookedTravels,
   }) {
     return UserModel(
       email: email ?? this.email,
       uid: uid ?? this.uid,
       userName: userName ?? this.userName,
-      creditCardModel: creditCardModel ?? this.creditCardModel,
+      creditCardModels: creditCardModels ?? this.creditCardModels,
       bookedTravels: bookedTravels ?? this.bookedTravels,
     );
   }
@@ -41,8 +39,8 @@ class UserModel {
       'email': email,
       'uid': uid,
       'userName': userName,
-      'creditCardModel': creditCardModel?.toMap(),
-      'bookedTravels': bookedTravels!.map((x) => x.toMap()).toList(),
+      'creditCardModels': creditCardModels?.map((x) => x.toMap()).toList(),
+      'bookedTravels': bookedTravels?.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -51,13 +49,16 @@ class UserModel {
       email: map['email'] as String,
       uid: map['uid'] as String,
       userName: map['userName'] as String,
-      creditCardModel: map['creditCardModel'] != null
-          ? CreditCardModel.fromMap(
-              map['creditCardModel'] as Map<String, dynamic>)
+      creditCardModels: map['creditCardModels'] != null
+          ? List<CreditCardModel>.from(
+              (map['creditCardModels'] as List<dynamic>).map<CreditCardModel>(
+                (x) => CreditCardModel.fromMap(x as Map<String, dynamic>),
+              ),
+            )
           : null,
       bookedTravels: map['bookedTravels'] != null
           ? List<BookedTravelsModel>.from(
-              (map['bookedTravels'] as List<int>).map<BookedTravelsModel?>(
+              (map['bookedTravels'] as List<dynamic>).map<BookedTravelsModel>(
                 (x) => BookedTravelsModel.fromMap(x as Map<String, dynamic>),
               ),
             )
@@ -72,7 +73,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(email: $email, uid: $uid, userName: $userName, creditCardModel: $creditCardModel, bookedTravels: $bookedTravels)';
+    return 'UserModel(email: $email, uid: $uid, userName: $userName, creditCardModels: $creditCardModels, bookedTravels: $bookedTravels)';
   }
 
   @override
@@ -82,7 +83,7 @@ class UserModel {
     return other.email == email &&
         other.uid == uid &&
         other.userName == userName &&
-        other.creditCardModel == creditCardModel &&
+        listEquals(other.creditCardModels, creditCardModels) &&
         listEquals(other.bookedTravels, bookedTravels);
   }
 
@@ -91,7 +92,7 @@ class UserModel {
     return email.hashCode ^
         uid.hashCode ^
         userName.hashCode ^
-        creditCardModel.hashCode ^
+        creditCardModels.hashCode ^
         bookedTravels.hashCode;
   }
 }
