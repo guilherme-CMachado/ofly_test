@@ -2,22 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ofly_tech_test/core/models/booked_travels_model.dart';
 import 'package:ofly_tech_test/features/home/home_page.dart';
-import 'package:ofly_tech_test/features/travels/travels_page.dart';
 
 class BookedTravelsService {
   final database = FirebaseFirestore.instance;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  final List<BookedTravelsModel> bookedTravels = [];
-  BookedTravelsModel? bookedTravelsModel;
   String userCollectionPath = 'users';
 
   Future<void> addTravel(
       String uid, BookedTravelsModel travels, BuildContext context) async {
     try {
-      await database
-          .collection(userCollectionPath)
-          .doc(uid)
-          .set(travels.toMap());
+      await database.collection(userCollectionPath).doc(uid).set({
+        'bookedTravels': FieldValue.arrayUnion([
+          travels.toMap(),
+        ]), // Adiciona a viagem ao array
+      }, SetOptions(merge: true));
+
       List<BookedTravelsModel> updatedTravels = await getBookedTravels(uid);
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -33,18 +32,28 @@ class BookedTravelsService {
 
   Future<List<BookedTravelsModel>> getBookedTravels(String uid) async {
     try {
-      var snapshot = await database
-          .collection(userCollectionPath)
-          .doc(uid)
-          .collection('bookedTravels')
-          .get();
+      var snapshot =
+          await database.collection(userCollectionPath).doc(uid).get();
 
-      return snapshot.docs
-          .map((doc) =>
-              BookedTravelsModel.fromMap(doc.data() as Map<String, dynamic>))
-          .toList();
+      if (snapshot.exists) {
+        var userData = snapshot.data() as Map<String, dynamic>;
+
+        if (userData.containsKey('bookedTravels')) {
+          List<dynamic> bookedTravelsData = userData['bookedTravels'];
+
+          // Mapear a lista de dados para a lista de objetos BookedTravelsModel
+          List<BookedTravelsModel> bookedTravelsList = bookedTravelsData
+              .map((data) => BookedTravelsModel.fromMap(data))
+              .toList();
+
+          return bookedTravelsList;
+        }
+      }
+
+      // Se não houver dados ou não houver 'bookedTravels', retornar uma lista vazia
+      return [];
     } catch (e) {
-      // Handle errors
+      // Lidar com erros
       print("Error getting booked travels: $e");
       return [];
     }

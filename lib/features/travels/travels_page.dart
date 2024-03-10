@@ -92,6 +92,8 @@ class TravelsPage extends StatelessWidget {
                   backgroundColor: AppColors.textButtonLightThemeColor),
               onPressed: () {
                 final travels = BookedTravelsModel(
+                  departure: _departureController.text,
+                  arrival: _arrivalController.text,
                   planeTicketNumber: _ticketController.text,
                   airPort: _airportController.text,
                   airCompany: _companyController.text,

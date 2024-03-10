@@ -11,13 +11,13 @@ class UserModel {
   final String uid;
   final String userName;
   CreditCardModel? creditCardModel;
-  List<BookedTravelsModel>? bookedTravelsModel;
+  List<BookedTravelsModel>? bookedTravels;
   UserModel({
     required this.email,
     required this.uid,
     required this.userName,
     this.creditCardModel,
-    this.bookedTravelsModel,
+    this.bookedTravels,
   });
 
   UserModel copyWith({
@@ -25,14 +25,14 @@ class UserModel {
     String? uid,
     String? userName,
     CreditCardModel? creditCardModel,
-    List<BookedTravelsModel>? bookedTravelsModel,
+    List<BookedTravelsModel>? bookedTravels,
   }) {
     return UserModel(
       email: email ?? this.email,
       uid: uid ?? this.uid,
       userName: userName ?? this.userName,
       creditCardModel: creditCardModel ?? this.creditCardModel,
-      bookedTravelsModel: bookedTravelsModel ?? this.bookedTravelsModel,
+      bookedTravels: bookedTravels ?? this.bookedTravels,
     );
   }
 
@@ -42,7 +42,7 @@ class UserModel {
       'uid': uid,
       'userName': userName,
       'creditCardModel': creditCardModel?.toMap(),
-      'bookedTravelsModel': bookedTravelsModel?.map((x) => x.toMap()).toList(),
+      'bookedTravels': bookedTravels!.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -55,9 +55,9 @@ class UserModel {
           ? CreditCardModel.fromMap(
               map['creditCardModel'] as Map<String, dynamic>)
           : null,
-      bookedTravelsModel: map['bookedTravelsModel'] != null
+      bookedTravels: map['bookedTravels'] != null
           ? List<BookedTravelsModel>.from(
-              (map['bookedTravelsModel'] as List).map<BookedTravelsModel?>(
+              (map['bookedTravels'] as List<int>).map<BookedTravelsModel?>(
                 (x) => BookedTravelsModel.fromMap(x as Map<String, dynamic>),
               ),
             )
@@ -72,7 +72,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(email: $email, uid: $uid, userName: $userName, creditCardModel: $creditCardModel, bookedTravelsModel: $bookedTravelsModel)';
+    return 'UserModel(email: $email, uid: $uid, userName: $userName, creditCardModel: $creditCardModel, bookedTravels: $bookedTravels)';
   }
 
   @override
@@ -83,7 +83,7 @@ class UserModel {
         other.uid == uid &&
         other.userName == userName &&
         other.creditCardModel == creditCardModel &&
-        listEquals(other.bookedTravelsModel, bookedTravelsModel);
+        listEquals(other.bookedTravels, bookedTravels);
   }
 
   @override
@@ -92,6 +92,6 @@ class UserModel {
         uid.hashCode ^
         userName.hashCode ^
         creditCardModel.hashCode ^
-        bookedTravelsModel.hashCode;
+        bookedTravels.hashCode;
   }
 }

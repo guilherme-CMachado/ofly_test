@@ -2,12 +2,16 @@
 import 'dart:convert';
 
 class BookedTravelsModel {
+  final String departure;
+  final String arrival;
   final String planeTicketNumber;
   final String airPort;
   final String airCompany;
   final String hour;
   final String fightDate;
   BookedTravelsModel({
+    required this.departure,
+    required this.arrival,
     required this.planeTicketNumber,
     required this.airPort,
     required this.airCompany,
@@ -16,6 +20,8 @@ class BookedTravelsModel {
   });
 
   BookedTravelsModel copyWith({
+    String? departure,
+    String? arrival,
     String? planeTicketNumber,
     String? airPort,
     String? airCompany,
@@ -23,6 +29,8 @@ class BookedTravelsModel {
     String? fightDate,
   }) {
     return BookedTravelsModel(
+      departure: departure ?? this.departure,
+      arrival: arrival ?? this.arrival,
       planeTicketNumber: planeTicketNumber ?? this.planeTicketNumber,
       airPort: airPort ?? this.airPort,
       airCompany: airCompany ?? this.airCompany,
@@ -33,6 +41,8 @@ class BookedTravelsModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'departure': departure,
+      'arrival': arrival,
       'planeTicketNumber': planeTicketNumber,
       'airPort': airPort,
       'airCompany': airCompany,
@@ -43,6 +53,8 @@ class BookedTravelsModel {
 
   factory BookedTravelsModel.fromMap(Map<String, dynamic> map) {
     return BookedTravelsModel(
+      departure: map['departure'] as String,
+      arrival: map['arrival'] as String,
       planeTicketNumber: map['planeTicketNumber'] as String,
       airPort: map['airPort'] as String,
       airCompany: map['airCompany'] as String,
@@ -58,14 +70,16 @@ class BookedTravelsModel {
 
   @override
   String toString() {
-    return 'BookedTravelsModel(planeTicketNumber: $planeTicketNumber, airPort: $airPort, airCompany: $airCompany, hour: $hour, fightDate: $fightDate)';
+    return 'BookedTravelsModel(departure: $departure, arrival: $arrival, planeTicketNumber: $planeTicketNumber, airPort: $airPort, airCompany: $airCompany, hour: $hour, fightDate: $fightDate)';
   }
 
   @override
   bool operator ==(covariant BookedTravelsModel other) {
     if (identical(this, other)) return true;
 
-    return other.planeTicketNumber == planeTicketNumber &&
+    return other.departure == departure &&
+        other.arrival == arrival &&
+        other.planeTicketNumber == planeTicketNumber &&
         other.airPort == airPort &&
         other.airCompany == airCompany &&
         other.hour == hour &&
@@ -74,7 +88,9 @@ class BookedTravelsModel {
 
   @override
   int get hashCode {
-    return planeTicketNumber.hashCode ^
+    return departure.hashCode ^
+        arrival.hashCode ^
+        planeTicketNumber.hashCode ^
         airPort.hashCode ^
         airCompany.hashCode ^
         hour.hashCode ^

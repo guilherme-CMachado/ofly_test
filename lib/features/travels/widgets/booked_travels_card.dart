@@ -10,9 +10,18 @@ class BookedTravelsCard extends StatelessWidget {
     return Card(
       child: Column(
         children: [
-          Text(
-            "${bookedTravelsModel.airCompany}",
+          ListTile(
+            leading: Text("Embarque: "),
+            trailing: Text("${bookedTravelsModel.departure}"),
           ),
+          ListTile(
+            leading: Text("Destino: "),
+            trailing: Text("${bookedTravelsModel.arrival}"),
+          ),
+          ListTile(
+            leading: Text("Aeroporto: "),
+            trailing: Text("${bookedTravelsModel.airPort}"),
+          )
         ],
       ),
     );
