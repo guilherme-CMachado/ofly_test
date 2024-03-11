@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:ofly_tech_test/core/models/booked_travels_model.dart';
 import 'package:ofly_tech_test/core/models/user_model.dart';
 import 'package:ofly_tech_test/core/services/travels/booked_travels_service.dart';
+import 'package:ofly_tech_test/features/card/card_page.dart';
 import 'package:ofly_tech_test/features/travels/travels_page.dart';
 import 'package:ofly_tech_test/features/travels/widgets/booked_travels_card.dart';
 
@@ -37,36 +37,45 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Home"),
       ),
       body: _buildBody(),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.airplane_ticket_outlined),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => TravelsPage(
-              userUID: widget.userModel!.uid,
-            ),
-          ));
-        },
-        tooltip: "Marcar Viagem",
-      ),
+      floatingActionButton: _selectedIndex == 0
+          ? FloatingActionButton(
+              child: Icon(Icons.airplane_ticket_outlined),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => TravelsPage(
+                    userUID: widget.userModel!.uid,
+                    userModel: widget.userModel,
+                  ),
+                ));
+              },
+              tooltip: "Marcar Viagem",
+            )
+          : SizedBox.shrink(),
       bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
   Widget _buildBody() {
-    return StreamBuilder<List<BookedTravelsModel>>(
-      stream: _travelService.getBookedTravelsStream(widget.userModel!.uid),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text("Erro: ${snapshot.error}");
-        }
+    if (_selectedIndex == 0) {
+      return StreamBuilder<List<BookedTravelsModel>>(
+        stream: _travelService.getBookedTravelsStream(widget.userModel!.uid),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("Erro: ${snapshot.error}");
+          }
 
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return _buildEmptyState();
-        }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return _buildEmptyState();
+          }
 
-        return _buildBookedTravelsList(snapshot.data!);
-      },
-    );
+          return _buildBookedTravelsList(snapshot.data!);
+        },
+      );
+    } else {
+      return CardPage(
+        userModel: widget.userModel,
+      );
+    }
   }
 
   Widget _buildEmptyState() {
@@ -114,23 +123,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBottomNavigationBar() {
-    return GNav(
-      tabs: const [
-        GButton(
-          text: 'Reservas',
-          icon: Icons.airplane_ticket,
-        ),
-        GButton(
-          text: 'Cartão de Crédito',
-          icon: Icons.credit_card,
-        ),
-      ],
-      selectedIndex: _selectedIndex,
-      onTabChange: (index) {
+    return BottomNavigationBar(
+      currentIndex: _selectedIndex,
+      onTap: (index) {
         setState(() {
           _selectedIndex = index;
         });
       },
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.airplane_ticket),
+          label: 'Reservas',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.credit_card),
+          label: 'Cartão de Crédito',
+        ),
+      ],
     );
   }
 }

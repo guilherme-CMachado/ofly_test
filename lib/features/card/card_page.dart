@@ -6,21 +6,24 @@ import 'package:ofly_tech_test/features/card/widgets/card_tille.dart';
 
 class CardPage extends StatefulWidget {
   UserModel? userModel;
-  CardPage({Key? key, this.userModel}) : super(key: key);
+  CardPage({
+    Key? key,
+    this.userModel,
+  }) : super(key: key);
 
   @override
-  _CardPageState createState() => _CardPageState();
+  State<CardPage> createState() => _CardPageState();
 }
 
 class _CardPageState extends State<CardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.userModel?.creditCardModels?.isNotEmpty == true
+      body: widget.userModel!.creditCardModels?.isNotEmpty == true
           ? ListView.builder(
               itemCount: widget.userModel!.creditCardModels!.length,
               itemBuilder: (BuildContext context, int index) {
-                return CardTile(
+                return CreditCardTile(
                   cardModel: widget.userModel!.creditCardModels![index],
                 );
               },
@@ -45,19 +48,29 @@ class _CardPageState extends State<CardPage> {
                       }
                     },
                     child: DottedBorder(
-                      borderType: BorderType.RRect,
-                      child: Container(
-                        child: Column(
-                          children: [
-                            Icon(Icons.credit_card),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Text("Adicione um cartão")
-                          ],
-                        ),
+                        child: Container(
+                      child: Column(
+                        children: [
+                          Icon(Icons.credit_card),
+                          const SizedBox(height: 20),
+                          Text("Adicione um cartão")
+                        ],
                       ),
-                    ),
+                    )),
+                    // child: DottedBorder(
+                    //   borderType: BorderType.RRect,
+                    //   child: Container(
+                    //     child: Column(
+                    //       children: [
+                    //         Icon(Icons.credit_card),
+                    //         const SizedBox(
+                    //           height: 20,
+                    //         ),
+                    //         Text("Adicione um cartão")
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                   ),
                 )
               ],
