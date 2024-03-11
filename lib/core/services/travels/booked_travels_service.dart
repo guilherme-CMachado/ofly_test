@@ -7,10 +7,20 @@ class BookedTravelsService {
   final database = FirebaseFirestore.instance;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   String userCollectionPath = 'users';
-
   Future<void> addTravel(
       String uid, BookedTravelsModel travels, BuildContext context) async {
     try {
+      // Verifica se o usuário já existe no banco de dados
+      var userDoc =
+          await database.collection(userCollectionPath).doc(uid).get();
+
+      if (!userDoc.exists) {
+        // Se o usuário não existir, cria um novo documento com um array vazio de viagens
+        await database.collection(userCollectionPath).doc(uid).set({
+          'bookedTravels': [],
+        });
+      }
+
       await database.collection(userCollectionPath).doc(uid).set({
         'bookedTravels': FieldValue.arrayUnion([
           travels.toMap(),
@@ -18,7 +28,13 @@ class BookedTravelsService {
       }, SetOptions(merge: true));
 
       List<BookedTravelsModel> updatedTravels = await getBookedTravels(uid);
-      Navigator.of(context).push(
+
+      // Se não houver viagens agendadas, adiciona um objeto vazio para evitar erros
+      if (updatedTravels.isEmpty) {
+        updatedTravels.add(travels);
+      }
+
+      Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => HomePage(
             bookedTravels: updatedTravels,

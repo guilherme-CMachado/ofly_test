@@ -17,7 +17,7 @@ class TravelsPage extends StatelessWidget {
   final List<BookedTravelsModel>? bookedTravels;
 
   TravelsPage({
-    super.key,
+    Key? key,
     required this.userUID,
     this.userModel,
     this.bookedTravels,
@@ -28,6 +28,7 @@ class TravelsPage extends StatelessWidget {
   final _companyController = TextEditingController();
   final _ticketController = TextEditingController();
   final _airportController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final _travelService = BookedTravelsService();
@@ -45,90 +46,94 @@ class TravelsPage extends StatelessWidget {
       body: Container(
         margin: const EdgeInsets.all(18),
         child: Form(
-            child: Column(
-          children: <Widget>[
-            OnflyTextField(
+          child: Column(
+            children: <Widget>[
+              OnflyTextField(
                 keyboardInputType: TextInputType.text,
                 textEditingController: _departureController,
-                hintText: "Digite o local de embarque"),
-            const Gap(20),
-            OnflyTextField(
+                hintText: "Digite o local de embarque",
+              ),
+              const Gap(20),
+              OnflyTextField(
                 keyboardInputType: TextInputType.text,
                 textEditingController: _arrivalController,
-                hintText: 'Digite o local de destino'),
-            const Gap(20),
-            OnflyTextField(
+                hintText: 'Digite o local de destino',
+              ),
+              const Gap(20),
+              OnflyTextField(
                 keyboardInputType: TextInputType.text,
                 textEditingController: _airportController,
-                hintText: 'Digite o aeroporto de destino'),
-            const Gap(20),
-            Flexible(
-              child: Row(
+                hintText: 'Digite o aeroporto de destino',
+              ),
+              const Gap(20),
+              Flexible(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    OflyCompanyInput(
+                      textEditingController: _companyController,
+                      hintText: "Companhia Área",
+                    ),
+                    SizedBox(width: 5),
+                    OflyTicketInput(
+                      hintText: "Num Ticket",
+                      ticketNumberController: _ticketController,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 30),
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  OflyCompanyInput(
-                    textEditingController: _companyController,
-                    hintText: "Companhia Área",
-                  ),
+                  OflySelectedTimeWidget(),
                   SizedBox(width: 5),
-                  OflyTicketInput(
-                    hintText: "Num Ticket",
-                    ticketNumberController: _ticketController,
-                  ),
+                  OflyDateTimePicker(),
                 ],
               ),
-            ),
-            const SizedBox(height: 30),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                OflySelectedTimeWidget(),
-                SizedBox(width: 5),
-                OflyDateTimePicker(),
-              ],
-            ),
-            const SizedBox(
-              height: 50,
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  backgroundColor: AppColors.textButtonLightThemeColor),
-              onPressed: () {
-                final travels = BookedTravelsModel(
-                  departure: _departureController.text,
-                  arrival: _arrivalController.text,
-                  planeTicketNumber: _ticketController.text,
-                  airPort: _airportController.text,
-                  airCompany: _companyController.text,
-                  hour: _getCurrentTime(),
-                  fightDate: _getCurrentDate(),
-                );
-
-                _travelService.addTravel(
-                  userUID,
-                  travels,
-                  context,
-                );
-              },
-              child: const Text(
-                "Agendar viagem",
-                style: TextStyle(color: Colors.white),
+              const SizedBox(
+                height: 50,
               ),
-            ),
-            const Spacer(),
-          ],
-        )),
+              TextButton(
+                style: TextButton.styleFrom(
+                    backgroundColor: AppColors.textButtonLightThemeColor),
+                onPressed: () {
+                  final travels = BookedTravelsModel(
+                    departure: _departureController.text,
+                    arrival: _arrivalController.text,
+                    planeTicketNumber: _ticketController.text,
+                    airPort: _airportController.text,
+                    airCompany: _companyController.text,
+                    hour: _getCurrentTime(),
+                    fightDate: _getCurrentDate(),
+                  );
+
+                  _travelService.addTravel(
+                    userUID,
+                    travels,
+                    context,
+                  );
+                },
+                child: const Text(
+                  "Agendar viagem",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              const Spacer(),
+            ],
+          ),
+        ),
       ),
     );
   }
 
   String _getCurrentTime() {
-    final now = DateTime.now();
+    final now = DateTime.now().toLocal();
     return DateFormat.Hm().format(now);
   }
 
   String _getCurrentDate() {
-    final now = DateTime.now();
+    final now = DateTime.now().toLocal();
     return DateFormat('dd/MM/yyyy').format(now);
   }
 }

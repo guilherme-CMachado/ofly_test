@@ -35,7 +35,7 @@ class UserService {
           .set(userModel.toMap());
 
       Fluttertoast.showToast(
-        msg: "Usuário criado com sucesso!",
+        msg: "Usuário criado com sucesso! Faça o ",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Colors.green,

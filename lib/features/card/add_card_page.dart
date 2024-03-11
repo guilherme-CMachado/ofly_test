@@ -6,10 +6,10 @@ import 'package:ofly_tech_test/utils/widgets/ofly_textfield_button.dart';
 
 class AddCardPage extends StatefulWidget {
   final UserModel? userModel;
-  const AddCardPage({super.key, this.userModel});
+  const AddCardPage({Key? key, this.userModel}) : super(key: key);
 
   @override
-  State<AddCardPage> createState() => _AddCardPageState();
+  _AddCardPageState createState() => _AddCardPageState();
 }
 
 class _AddCardPageState extends State<AddCardPage> {
@@ -22,58 +22,60 @@ class _AddCardPageState extends State<AddCardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back),
-        ),
         title: Text("Adicione um cartão"),
       ),
-      body: Container(
-        margin: const EdgeInsets.all(12),
-        child: Form(
-          child: Column(
-            children: [
-              OnflyTextField(
-                textEditingController: _cardNumberController,
-                keyboardInputType: TextInputType.number,
-                hintText: "Digite o número do cartão",
-              ),
-              OnflyTextField(
-                keyboardInputType: TextInputType.text,
-                textEditingController: _flagController,
-                hintText: "Digite a bandeira",
-              ),
-              Text("Defina um limite"),
-              Text(
-                "${_seekbarValue.toStringAsFixed(2)}",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Slider(
-                min: 0.0,
-                max: 1000.0,
-                label: "Defina um limite",
-                value: _seekbarValue,
-                onChanged: (value) {
-                  setState(() {
-                    _seekbarValue = value;
-                  });
-                },
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  CreditCardModel cardModel = CreditCardModel(
-                      flag: _flagController.text,
-                      extract: _seekbarValue,
-                      cardNumber: _cardNumberController.text);
-                  _cardService.addCreditCard(
-                      cardModel, widget.userModel!.uid, context);
-                },
-                child: Text("Adicionar Cartão"),
-              ),
-            ],
-          ),
+      body: Form(
+        child: Column(
+          children: [
+            OnflyTextField(
+              keyboardInputType: TextInputType.number,
+              textEditingController: _cardNumberController,
+              hintText: "Digite o número do cartão",
+            ),
+            OnflyTextField(
+              keyboardInputType: TextInputType.text,
+              textEditingController: _flagController,
+              hintText: "Digite a bandeira",
+            ),
+            SizedBox(height: 20),
+            Text("${_seekbarValue.toStringAsFixed(0)}"),
+            Slider(
+              value: _seekbarValue,
+              min: 0,
+              max: 1000,
+              onChanged: (value) {
+                setState(() {
+                  _seekbarValue = value;
+                });
+              },
+            ),
+            Text(
+              "Limite: ${_seekbarValue.toStringAsFixed(2)}",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                CreditCardModel cardModel = CreditCardModel(
+                  flag: _flagController.text,
+                  extract: _seekbarValue,
+                  cardNumber: _cardNumberController.text,
+                );
+
+                List<CreditCardModel> updatedCards =
+                    await _cardService.addCreditCard(
+                  cardModel,
+                  widget.userModel!.uid,
+                  widget.userModel?.creditCardModels,
+                  context,
+                );
+                UserModel updatedUserModel = widget.userModel!.copyWith(
+                  creditCardModels: updatedCards,
+                );
+                Navigator.of(context).pop(updatedUserModel);
+              },
+              child: Text("Adicionar Cartão"),
+            ),
+          ],
         ),
       ),
     );

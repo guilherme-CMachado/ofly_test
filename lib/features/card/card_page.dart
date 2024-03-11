@@ -1,24 +1,27 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:ofly_tech_test/core/models/credit_card_model.dart';
 import 'package:ofly_tech_test/core/models/user_model.dart';
 import 'package:ofly_tech_test/features/card/add_card_page.dart';
 import 'package:ofly_tech_test/features/card/widgets/card_tille.dart';
 
-class CardPage extends StatelessWidget {
-  final UserModel? userModel;
-  final CreditCardModel? cardModel;
-  const CardPage({super.key, this.userModel, this.cardModel});
+class CardPage extends StatefulWidget {
+  UserModel? userModel;
+  CardPage({Key? key, this.userModel}) : super(key: key);
 
+  @override
+  _CardPageState createState() => _CardPageState();
+}
+
+class _CardPageState extends State<CardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: userModel?.creditCardModels.isNotEmpty
+      body: widget.userModel?.creditCardModels?.isNotEmpty == true
           ? ListView.builder(
-              itemCount: userModel!.creditCardModels!.length,
+              itemCount: widget.userModel!.creditCardModels!.length,
               itemBuilder: (BuildContext context, int index) {
                 return CardTile(
-                  cardModel: userModel!.creditCardModels![index],
+                  cardModel: widget.userModel!.creditCardModels![index],
                 );
               },
             )
@@ -26,11 +29,20 @@ class CardPage extends StatelessWidget {
               children: [
                 Center(
                   child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
+                    onTap: () async {
+                      UserModel? updatedUserModel =
+                          await Navigator.of(context).push(
+                        MaterialPageRoute(
                           builder: (context) => AddCardPage(
-                                userModel: userModel,
-                              )));
+                            userModel: widget.userModel,
+                          ),
+                        ),
+                      );
+                      if (updatedUserModel != null) {
+                        setState(() {
+                          widget.userModel = updatedUserModel;
+                        });
+                      }
                     },
                     child: DottedBorder(
                       borderType: BorderType.RRect,

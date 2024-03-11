@@ -63,51 +63,53 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildBookedTravelsList() {
-    return widget.userModel!.bookedTravels != null
+    return widget.userModel!.bookedTravels!.isEmpty
         ? ListView.builder(
-            itemCount: widget.userModel!.bookedTravels!.length,
+            itemCount: widget.userModel?.bookedTravels?.length,
             itemBuilder: (BuildContext context, int index) {
               return BookedTravelsCard(
                 bookedTravelsModel: widget.userModel!.bookedTravels![index],
               );
             },
           )
-        : Column(
-            children: [
-              RichText(
-                text: TextSpan(
-                  children: [
-                    const TextSpan(
-                      text: "Olá ",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
+        : SingleChildScrollView(
+            child: Column(
+              children: [
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      const TextSpan(
+                        text: "Olá ",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                        text: "${widget.userModel?.userName ?? ""}",
-                        style: TextStyle(color: Colors.red, fontSize: 20))
-                  ],
+                      TextSpan(
+                          text: "${widget.userModel?.userName ?? ""}",
+                          style: TextStyle(color: Colors.red, fontSize: 20))
+                    ],
+                  ),
                 ),
-              ),
-              Spacer(),
-              Text(
-                  "Parece que você não tem viagens programadas, vamos marcar uma?"),
-              Center(
-                child: FloatingActionButton(
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => TravelsPage(
-                              userModel: widget.userModel,
-                              userUID: widget.userModel!.uid,
-                            )));
-                  },
-                  child: const Icon(Icons.airplane_ticket),
+                Spacer(),
+                Text(
+                    "Parece que você não tem viagens programadas, vamos marcar uma?"),
+                Center(
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => TravelsPage(
+                                userModel: widget.userModel,
+                                userUID: widget.userModel!.uid,
+                              )));
+                    },
+                    child: const Icon(Icons.airplane_ticket),
+                  ),
                 ),
-              ),
-              const Spacer(),
-            ],
+                const Spacer(),
+              ],
+            ),
           );
   }
 
