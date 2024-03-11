@@ -12,16 +12,18 @@ import 'package:ofly_tech_test/utils/widgets/ofly_textfield_button.dart';
 import 'package:ofly_tech_test/utils/widgets/ofly_ticket_input.dart';
 
 class TravelsPage extends StatelessWidget {
-  UserModel? userModel;
+  final UserModel? userModel;
   final String userUID;
   final List<BookedTravelsModel>? bookedTravels;
+  final Function()? refreshBookedTravels;
 
   TravelsPage({
     Key? key,
     required this.userUID,
     this.userModel,
     this.bookedTravels,
-  });
+    this.refreshBookedTravels,
+  }) : super(key: key);
 
   final _departureController = TextEditingController();
   final _arrivalController = TextEditingController();
@@ -43,11 +45,11 @@ class TravelsPage extends StatelessWidget {
         ),
         title: const Text("Marcar viagem"),
       ),
-      body: Container(
-        margin: const EdgeInsets.all(18),
-        child: Form(
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.all(18),
           child: Column(
-            children: <Widget>[
+            children: [
               OnflyTextField(
                 keyboardInputType: TextInputType.text,
                 textEditingController: _departureController,
@@ -66,38 +68,34 @@ class TravelsPage extends StatelessWidget {
                 hintText: 'Digite o aeroporto de destino',
               ),
               const Gap(20),
-              Flexible(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    OflyCompanyInput(
-                      textEditingController: _companyController,
-                      hintText: "Companhia Área",
-                    ),
-                    SizedBox(width: 5),
-                    OflyTicketInput(
-                      hintText: "Num Ticket",
-                      ticketNumberController: _ticketController,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 30),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  OflySelectedTimeWidget(),
-                  SizedBox(width: 5),
-                  OflyDateTimePicker(),
+                  OflyCompanyInput(
+                    textEditingController: _companyController,
+                    hintText: "Companhia Área",
+                  ),
+                  OflyTicketInput(
+                    hintText: "Num Ticket",
+                    ticketNumberController: _ticketController,
+                  ),
                 ],
               ),
-              const SizedBox(
-                height: 50,
+              const Gap(20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  OflyDateTimePicker(),
+                  OflySelectedTimeWidget(),
+                ],
               ),
+              const Gap(20),
               TextButton(
                 style: TextButton.styleFrom(
-                    backgroundColor: AppColors.textButtonLightThemeColor),
-                onPressed: () {
+                  minimumSize: Size(double.maxFinite, 50),
+                  backgroundColor: AppColors.textButtonLightThemeColor,
+                ),
+                onPressed: () async {
                   final travels = BookedTravelsModel(
                     departure: _departureController.text,
                     arrival: _arrivalController.text,
@@ -108,10 +106,12 @@ class TravelsPage extends StatelessWidget {
                     fightDate: _getCurrentDate(),
                   );
 
-                  _travelService.addTravel(
+                  await _travelService.addTravel(
                     userUID,
                     travels,
                     context,
+                    refreshBookedTravels,
+                    userModel,
                   );
                 },
                 child: const Text(
@@ -119,7 +119,6 @@ class TravelsPage extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              const Spacer(),
             ],
           ),
         ),

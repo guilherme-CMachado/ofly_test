@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ofly_tech_test/core/common/validators.dart';
 import 'package:ofly_tech_test/core/services/user_services.dart';
+import 'package:ofly_tech_test/utils/colors/appColors.dart';
 
 class CadastroPage extends StatefulWidget {
   static String route = "/cadastro";
+
   const CadastroPage({super.key});
 
   @override
@@ -10,73 +13,93 @@ class CadastroPage extends StatefulWidget {
 }
 
 class _CadastroPageState extends State<CadastroPage> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final nameController = TextEditingController();
+  final _userService = UserService();
+  final _validator = Validator();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  void submitForm() {
+    if (formKey.currentState!.validate()) {
+      _userService.signUp(
+        passwordController.text,
+        context,
+        emailController.text,
+        nameController.text,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-    final nameController = TextEditingController();
-
-    final _userService = UserService();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cadastro"),
+        title: const Text("Cadastro"),
       ),
       body: Container(
         margin: const EdgeInsets.all(12),
         child: Form(
+          key: formKey,
           child: Column(
             children: [
-              Text("Informe seus dados"),
-              SizedBox(
+              const Text("Informe seus dados"),
+              const SizedBox(
                 height: 30,
               ),
               TextFormField(
                 controller: nameController,
-                decoration: InputDecoration(
-                    border: InputBorder.none, hintText: "Nome Completo"),
+                validator: _validator.validateFullName,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Nome Completo",
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               TextFormField(
                 keyboardType: TextInputType.emailAddress,
                 controller: emailController,
-                decoration: InputDecoration(
-                    border: InputBorder.none, hintText: "Email"),
+                validator: _validator.validateEmail,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Email",
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               TextFormField(
                 controller: passwordController,
-                validator: (validator) {
-                  if (validator!.length < 6) {
-                    "A senha deverá no mínimo 6 caracteres";
-                  }
-                },
+                validator: _validator.validatePassword,
                 decoration: const InputDecoration(
-                    border: InputBorder.none, hintText: "Senha"),
+                  border: OutlineInputBorder(),
+                  hintText: "Senha",
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
+                  ),
+                ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              Spacer(),
+              const Spacer(),
               Container(
                 margin: const EdgeInsets.all(12),
                 child: TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    maximumSize: Size(double.infinity, 40),
+                    backgroundColor: AppColors.textButtonLightThemeColor,
+                    minimumSize: const Size(double.maxFinite, 50),
                   ),
-                  onPressed: () {
-                    _userService.signUp(
-                      passwordController.text,
-                      context,
-                      emailController.text,
-                      nameController.text,
-                    );
-                  },
-                  child: Text(
+                  onPressed: submitForm,
+                  child: const Text(
                     "Enviar dados",
                     style: TextStyle(color: Colors.white),
                   ),

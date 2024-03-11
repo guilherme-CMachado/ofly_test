@@ -2,7 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ofly_tech_test/features/cadastro/cadastro_page.dart';
 import 'package:ofly_tech_test/features/home/home_page.dart';
-import 'package:ofly_tech_test/features/login_page.dart';
+import 'package:ofly_tech_test/features/login/login_page.dart';
+import 'package:ofly_tech_test/features/travels/travels_page.dart';
 import 'package:ofly_tech_test/firebase_options.dart';
 
 void main() async {

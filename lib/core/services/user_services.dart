@@ -41,7 +41,10 @@ class UserService {
         backgroundColor: Colors.green,
         textColor: Colors.white,
       );
-      Navigator.pushReplacementNamed(context, "/login");
+      if (userModel != null) {
+        Navigator.pushReplacementNamed(context, "/login");
+      }
+
       return userModel;
     } catch (e) {
       print("Error during sign up: $e");
